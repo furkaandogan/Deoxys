@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Drawing;
 using Deoxys.Planets;
 
 namespace Deoxys.Rovers
@@ -19,7 +18,24 @@ namespace Deoxys.Rovers
         /// <returns></returns>
         public virtual Point ForwardMove(DirectionType currentDirection, Point location)
         {
-            throw new System.NotImplementedException();
+            Point newLocation = new Point();
+            switch (currentDirection)
+            {
+                case DirectionType.East:
+                    newLocation = new Point(location.X + 1, location.Y);
+                    break;
+                case DirectionType.North:
+                    newLocation = new Point(location.X, location.Y + 1);
+                    break;
+                case DirectionType.South:
+                    newLocation = new Point(location.X, location.Y - 1);
+                    break;
+                case DirectionType.West:
+                    newLocation = new Point(location.X - 1, location.Y);
+                    break;
+            }
+
+            return newLocation;
         }
 
 
@@ -30,7 +46,12 @@ namespace Deoxys.Rovers
         /// <returns></returns>
         public virtual DirectionType LeftMove(DirectionType currentDirection)
         {
-            return currentDirection - 90;
+            if ((int)currentDirection - 90 == -90)
+                currentDirection = DirectionType.West;
+            else
+                currentDirection = currentDirection - 90;
+            return currentDirection;
+            // return currentDirection - 90;
         }
 
         /// <summary>
@@ -41,7 +62,13 @@ namespace Deoxys.Rovers
 
         public virtual DirectionType RigthMove(DirectionType currentDirection)
         {
-            return currentDirection + 90;
+            if ((int)currentDirection + 90 == 360)
+                currentDirection = DirectionType.North;
+            else
+                currentDirection = currentDirection + 90;
+            return currentDirection;
+
+            // return currentDirection + 90;
         }
     }
 }
