@@ -10,6 +10,11 @@ namespace Deoxys
     /// </summary>
     public interface IRover
     {
+        /// <summary>
+        /// rover aracının gezegene başarılı iniş yaptığı bilgisini tutar
+        /// </summary>
+        /// <value></value>
+        bool IsDropped { get; }
 
         /// <summary>
         /// rover aracının bırakıldığı gezegenin bilgisini tutar

@@ -13,18 +13,45 @@ namespace Deoxys
     public abstract class BaseRover
         : IRover
     {
+        private readonly IPlanet _planet;
+        private readonly IList<MovementCommandType> _movementCommands;
+        private bool _isDropped;
+
+        /// <summary>
+        /// rover aracının gezegene başarılı iniş yaptığı bilgisini tutar
+        /// </summary>
+        /// <value></value>
+        public bool IsDropped
+        {
+            get
+            {
+                return _isDropped;
+            }
+        }
 
         /// <summary>
         /// rover aracının bırakıldığı gezegenin bilgisini tutar
         /// </summary>
         /// <value></value>
-        public IPlanet DroppedPlanet { get; }
+        public IPlanet DroppedPlanet
+        {
+            get
+            {
+                return _planet;
+            }
+        }
 
         /// <summary>
         /// rover aracının gezegen üzerindeki hareket komutlarınını tutar
         /// </summary>
         /// <value></value>
-        public IList<MovementCommandType> MovementCommands { get; }
+        public IList<MovementCommandType> MovementCommands
+        {
+            get
+            {
+                return _movementCommands;
+            }
+        }
 
         /// <summary>
         /// rover aracının şuanki konum bilgisini barındırır
@@ -62,7 +89,18 @@ namespace Deoxys
         /// rover aracınını verilen gezegene indirir
         /// </summary>
         /// <param name="planet">indirilmek istenen gezegen</param>
-        public abstract void Drop(IPlanet planet);
+        public virtual void Drop(IPlanet planet)
+        {
+            bool isValidHorizontal = Location.X >= 0 && Location.X <= planet.Size.Width;
+            bool isValidVertical = Location.Y >= 0 && Location.Y <= planet.Size.Height;
+
+            if (isValidHorizontal && isValidVertical)
+            {
+                _isDropped = true;
+            }
+
+            throw new RoverDropException();
+        }
 
         /// <summary>
         /// /// rover aracının gezegen üzerinden gireln hareket komutlarına göre keşif yapmasını sağlşar
@@ -71,10 +109,10 @@ namespace Deoxys
         {
             if (this.MovementCommands == null)
             {
-                throw new NullReferenceException($"{nameof(this.MovementCommands)} is null");
+                throw new NullReferenceException($"{nameof(MovementCommands)} is null");
             }
 
-            foreach (MovementCommandType movement in this.MovementCommands)
+            foreach (MovementCommandType movement in MovementCommands)
             {
                 this.Move(movement);
             }
@@ -89,10 +127,10 @@ namespace Deoxys
         /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
         public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands)
         {
-            this.Location = location;
-            this.Direction = direction;
-            this.DroppedPlanet = droppedPlanet;
-            this.MovementCommands = movementCommands;
+            Location = location;
+            Direction = direction;
+            _planet = droppedPlanet;
+            _movementCommands = movementCommands;
         }
     }
 }
