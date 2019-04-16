@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Deoxys.Planets;
 
-namespace Deoxys
+namespace Deoxys.Rovers
 {
 
     /// <summary>

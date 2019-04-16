@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Deoxys.Exceptions;
 using Deoxys.Planets;
 
-namespace Deoxys
+namespace Deoxys.Rovers
 {
     /// <summary>
     /// rover araçlarının temel işlerini ve kontrollerini yapan abstract classıdır tüm rover araçları bundan türetilmelidir
@@ -13,6 +13,7 @@ namespace Deoxys
     public abstract class BaseRover
         : IRover
     {
+        protected readonly IMovementController _movementController;
         private readonly IPlanet _planet;
         private readonly IList<MovementCommandType> _movementCommands;
         private bool _isDropped;
@@ -74,10 +75,13 @@ namespace Deoxys
             switch (movement)
             {
                 case MovementCommandType.Left:
+                    Direction = _movementController.LeftMove(Direction);
                     break;
                 case MovementCommandType.Rigth:
+                    Direction = _movementController.RigthMove(Direction);
                     break;
                 case MovementCommandType.Forward:
+                    Location = _movementController.ForwardMove(Direction, Location);
                     break;
                 case MovementCommandType.NONE:
                 default:
@@ -126,10 +130,25 @@ namespace Deoxys
         /// <param name="droppedPlanet">inişi ve keşifini gerçekleştireceği gezegen bilgisi</param>
         /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
         public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands)
+            : this(location, direction, droppedPlanet, movementCommands, new DefaultRoverMovementConttroller())
+        {
+
+        }
+
+        /// <summary>
+        /// tüm bilgili ve görevleri tanımlı bir rover oluşturur
+        /// </summary>
+        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
+        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
+        /// <param name="movementController">roverın hareketini gerçekleştirecek olan sınıftır</param>
+        /// <param name="droppedPlanet">inişi ve keşifini gerçekleştireceği gezegen bilgisi</param>
+        /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
+        public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands, IMovementController movementController)
         {
             Location = location;
             Direction = direction;
             _planet = droppedPlanet;
+            _movementController = movementController;
             _movementCommands = movementCommands;
         }
     }
