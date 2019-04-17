@@ -7,6 +7,7 @@ namespace Deoxys.Exceptions
     public class RoverDropException : Exception
     {
         public RoverDropException()
+            : this("rover is failed dropped")
         {
 
         }

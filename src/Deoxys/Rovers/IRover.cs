@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Drawing;
 using Deoxys.Planets;
 
-namespace Deoxys
+namespace Deoxys.Rovers
 {
 
     /// <summary>
@@ -10,6 +9,11 @@ namespace Deoxys
     /// </summary>
     public interface IRover
     {
+        /// <summary>
+        /// rover aracının gezegene başarılı iniş yaptığı bilgisini tutar
+        /// </summary>
+        /// <value></value>
+        bool IsDropped { get; }
 
         /// <summary>
         /// rover aracının bırakıldığı gezegenin bilgisini tutar
@@ -51,5 +55,16 @@ namespace Deoxys
         /// rover aracının gezegen üzerinden gireln hareket komutlarına göre keşif yapmasını sağlşar
         /// </summary>
         void Explore();
+
+        /// <summary>
+        /// rover aracına yeni bir hareket planı bilgisi ekler
+        /// </summary>
+        /// <param name="vovementCommands">hareket bilgisi</param>
+        void SetMovementCommand(IList<MovementCommandType> vovementCommands);
+
+        /// <summary>
+        /// rover aracının raporlama işlemini gerçekleştirir
+        /// </summary>
+        void Report();
     }
 }

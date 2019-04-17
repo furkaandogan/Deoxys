@@ -8,18 +8,18 @@ namespace Deoxys
     /// konum ve yön tipleri
     /// </summary>
     public enum DirectionType
-        : sbyte
+        : int
     {
         [Display(Name = "N")]
         North = 0,
 
         [Display(Name = "E")]
-        East,
+        East = 90,
 
         [Display(Name = "S")]
-        South,
+        South = 180,
 
         [Display(Name = "W")]
-        West
+        West = 270
     }
 }
