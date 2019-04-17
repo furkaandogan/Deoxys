@@ -7,6 +7,7 @@ using Deoxys.Planets;
 using Deoxys.Console.UI.Command.Interpret;
 using System.Linq;
 using Deoxys.Console.UI.Report;
+using Deoxys.Rovers.Report;
 
 namespace Deoxys.Console.UI.Command
 {
@@ -19,6 +20,7 @@ namespace Deoxys.Console.UI.Command
         private readonly InputParser _inputParser;
         private readonly Func<Point, DirectionType, IRover> _roverFactory;
         private readonly Func<Size, IPlanet> _planetFactory;
+        private readonly Func<IRover, IRoverReport> _roverReportFactory;
         private readonly IList<IRover> _rovers;
 
         /// <summary>
@@ -27,11 +29,12 @@ namespace Deoxys.Console.UI.Command
         /// <param name="inputParser"></param>
         /// <param name="roverFactory"></param>
         /// <param name="planetFactory"></param>
-        public CommandCenter(InputParser inputParser, Func<Point, DirectionType, IRover> roverFactory, Func<Size, IPlanet> planetFactory)
+        public CommandCenter(InputParser inputParser, Func<Point, DirectionType, IRover> roverFactory, Func<Size, IPlanet> planetFactory, Func<IRover, IRoverReport> roverReportFactory)
         {
             _inputParser = inputParser;
             _roverFactory = roverFactory;
             _planetFactory = planetFactory;
+            _roverReportFactory = roverReportFactory;
             _rovers = new List<IRover>();
         }
 
@@ -94,7 +97,7 @@ namespace Deoxys.Console.UI.Command
             foreach (IRover rover in _rovers)
             {
                 // rover.Report();
-                new RoverConsoleReport(rover)
+                _roverReportFactory(rover)
                     .Write();
             }
             return this;
@@ -127,8 +130,8 @@ namespace Deoxys.Console.UI.Command
                 .Select(x => EnumHelpers<MovementCommandType>.GetValueFromName(x.ToString()))
                 .ToList();
         }
-        
+
         #endregion
-        
+
     }
 }

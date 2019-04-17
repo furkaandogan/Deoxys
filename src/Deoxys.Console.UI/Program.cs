@@ -3,11 +3,13 @@ using System.Text;
 using Deoxys;
 using Deoxys.Rovers;
 using Deoxys.Planets;
+using Deoxys.Console.UI.Report;
 using Deoxys.Console.UI.Command;
 using Deoxys.Console.UI.Command.Interpret;
 using System.Reflection;
 using Autofac;
 using Deoxys.Mars;
+using Deoxys.Rovers.Report;
 
 namespace Deoxys.Console.UI
 {
@@ -68,6 +70,13 @@ namespace Deoxys.Console.UI
                     return new MarsPlanet(size);
                 };
             }).As<Func<Size, IPlanet>>();
+            builder.Register<Func<IRover, IRoverReport>>((context) =>
+             {
+                 return (rover) =>
+                 {
+                     return new RoverConsoleReport(rover);
+                 };
+             }).As<Func<IRover, IRoverReport>>();
 
             return builder;
         }

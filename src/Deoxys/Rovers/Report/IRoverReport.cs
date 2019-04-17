@@ -22,5 +22,11 @@ namespace Deoxys.Rovers.Report
         /// </summary>
         void LocationWrite();
 
+        /// <summary>
+        /// raporlanmak istenen rover aracın bilgilerini setler
+        /// </summary>
+        /// <param name="rover">raporlanmak istenen rover</param>
+        void SetRover(IRover rover);
+
     }
 }

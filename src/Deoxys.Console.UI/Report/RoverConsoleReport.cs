@@ -10,7 +10,7 @@ namespace Deoxys.Console.UI.Report
     public sealed class RoverConsoleReport
         : IRoverReport
     {
-        private readonly IRover _rover;
+        private IRover _rover;
 
         /// <summary>
         /// raporlanacak rover aracı
@@ -34,6 +34,13 @@ namespace Deoxys.Console.UI.Report
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public RoverConsoleReport()
+        {
+        }
+
+        /// <summary>
         /// rover aracının lokasyon raporlama işlemini yapar
         /// </summary>
         public void LocationWrite()
@@ -47,6 +54,15 @@ namespace Deoxys.Console.UI.Report
         public void Write()
         {
             LocationWrite();
+        }
+
+        /// <summary>
+        /// raporlanmak istenen rover aracın bilgilerini setler
+        /// </summary>
+        /// <param name="rover">raporlanmak istenen rover</param>
+        public void SetRover(IRover rover)
+        {
+            _rover = rover;
         }
     }
 }
