@@ -55,5 +55,16 @@ namespace Deoxys.Rovers
         /// rover aracının gezegen üzerinden gireln hareket komutlarına göre keşif yapmasını sağlşar
         /// </summary>
         void Explore();
+
+        /// <summary>
+        /// rover aracına yeni bir hareket planı bilgisi ekler
+        /// </summary>
+        /// <param name="vovementCommands">hareket bilgisi</param>
+        void SetMovementCommand(IList<MovementCommandType> vovementCommands);
+
+        /// <summary>
+        /// rover aracının raporlama işlemini gerçekleştirir
+        /// </summary>
+        void Report();
     }
 }

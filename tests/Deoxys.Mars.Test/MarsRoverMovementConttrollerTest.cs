@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Deoxys.Rovers;
+using Deoxys.Mars;
 
-
-
-namespace Deoxys.Test
+namespace Deoxys.Mars.Test
 {
-    public class DefaultRoverMovementConttrollerTest
+    public class MarsRoverMovementConttrollerTest
     {
         private readonly IMovementController _moveController;
-        public DefaultRoverMovementConttrollerTest()
+        public MarsRoverMovementConttrollerTest()
         {
-            _moveController = new DefaultRoverMovementConttroller();
+            _moveController = new MarsRoverMovementConttroller();
         }
 
         [Theory]

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Deoxys.Exceptions;
 using Deoxys.Planets;
+using Deoxys.Rovers.Report;
 
 namespace Deoxys.Rovers
 {
@@ -13,8 +14,10 @@ namespace Deoxys.Rovers
         : IRover
     {
         protected readonly IMovementController _movementController;
-        private readonly IPlanet _planet;
-        private readonly IList<MovementCommandType> _movementCommands;
+        protected readonly IRoverReport _roverRoporter;
+
+        private IPlanet _droppedPlanet;
+        private IList<MovementCommandType> _movementCommands;
         private bool _isDropped;
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace Deoxys.Rovers
         {
             get
             {
-                return _planet;
+                return _droppedPlanet;
             }
         }
 
@@ -64,6 +67,61 @@ namespace Deoxys.Rovers
         /// </summary>
         /// <value></value>
         public DirectionType Direction { get; set; }
+
+        /// <summary>
+        /// konum ve yönü belli indirilmeye hazor bir rover hazorlar
+        /// </summary>
+        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
+        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
+        public BaseRover(Point location, DirectionType direction)
+            : this(location, direction, null, null, new DefaultRoverMovementConttroller())
+        {
+
+        }
+
+        /// <summary>
+        /// konum ve yönü belli indirilmeye hazor bir rover hazorlar
+        /// </summary>
+        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
+        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
+        /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
+        public BaseRover(Point location, DirectionType direction, IMovementController movementController)
+            : this(location, direction, null, null, movementController)
+        {
+
+        }
+
+        /// <summary>
+        /// tüm bilgili ve görevleri tanımlı bir rover oluşturur
+        /// </summary>
+        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
+        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
+        /// <param name="droppedPlanet">inişi ve keşifini gerçekleştireceği gezegen bilgisi</param>
+        /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
+        public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands)
+            : this(location, direction, droppedPlanet, movementCommands, new DefaultRoverMovementConttroller())
+        {
+
+        }
+
+        /// <summary>
+        /// tüm bilgili ve görevleri tanımlı bir rover oluşturur
+        /// </summary>
+        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
+        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
+        /// <param name="movementController">roverın hareketini gerçekleştirecek olan sınıftır</param>
+        /// <param name="droppedPlanet">inişi ve keşifini gerçekleştireceği gezegen bilgisi</param>
+        /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
+        public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands, IMovementController movementController)
+        {
+            Location = location;
+            Direction = direction;
+            _droppedPlanet = droppedPlanet;
+            _movementController = movementController;
+            _movementCommands = movementCommands;
+        }
+
+
 
         /// <summary>
         /// rover aracını verilen hareket tipine göre harekett ettirir
@@ -100,6 +158,8 @@ namespace Deoxys.Rovers
             if (isValidHorizontal && isValidVertical)
             {
                 _isDropped = true;
+                _droppedPlanet = planet;
+                return;
             }
 
             throw new RoverDropException();
@@ -122,33 +182,21 @@ namespace Deoxys.Rovers
         }
 
         /// <summary>
-        /// tüm bilgili ve görevleri tanımlı bir rover oluşturur
+        /// rover aracına yeni bir hareket planı bilgisi ekler
         /// </summary>
-        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
-        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
-        /// <param name="droppedPlanet">inişi ve keşifini gerçekleştireceği gezegen bilgisi</param>
-        /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
-        public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands)
-            : this(location, direction, droppedPlanet, movementCommands, new DefaultRoverMovementConttroller())
+        /// <param name="vovementCommands">hareket bilgisi</param>
+        public void SetMovementCommand(IList<MovementCommandType> movementCommands)
         {
-
+            _movementCommands = movementCommands;
         }
 
+
         /// <summary>
-        /// tüm bilgili ve görevleri tanımlı bir rover oluşturur
+        /// rover aracının raporlama işlemini gerçekleştirir
         /// </summary>
-        /// <param name="location">gezegende iniş yapacağı konumu belirler</param>
-        /// <param name="direction">iniş halindeki ilk hareket yönünü belirler</param>
-        /// <param name="movementController">roverın hareketini gerçekleştirecek olan sınıftır</param>
-        /// <param name="droppedPlanet">inişi ve keşifini gerçekleştireceği gezegen bilgisi</param>
-        /// <param name="movementCommands">keşif için gerçekleştireceği hareket bilgisi</param>
-        public BaseRover(Point location, DirectionType direction, IPlanet droppedPlanet, IList<MovementCommandType> movementCommands, IMovementController movementController)
+        public void Report()
         {
-            Location = location;
-            Direction = direction;
-            _planet = droppedPlanet;
-            _movementController = movementController;
-            _movementCommands = movementCommands;
+            _roverRoporter.Write();
         }
     }
 }
