@@ -1,0 +1,7 @@
+version: "3.4"
+services:
+  api:
+    image: deoxys-console-ui:1.0.0-beta
+    build:
+      context: ../src/Deoxys.Console.UI/
+      dockerfile: Dockerfile
