@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Deoxys.Rovers;
+
 namespace Deoxys.Planets
 {
 
@@ -12,6 +15,7 @@ namespace Deoxys.Planets
         /// </summary>
         /// <value></value>
         public Size Size { get; set; }
+        public IList<IRover> Rovers { get; set; }
 
         /// <summary>
         /// istenilen boyutlarda bir gezegen oluşturur
@@ -20,6 +24,7 @@ namespace Deoxys.Planets
         public BasePlanet(Size size)
         {
             this.Size = size;
+            this.Rovers = new List<IRover>();
         }
 
 

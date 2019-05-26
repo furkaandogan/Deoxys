@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Deoxys.Rovers;
+
 namespace Deoxys.Planets
 {
     /// <summary>
@@ -10,5 +13,7 @@ namespace Deoxys.Planets
         /// </summary>
         /// <value></value>
         Size Size { get; set; }
+
+        IList<IRover> Rovers { get; set;}
     }
 }

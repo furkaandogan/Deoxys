@@ -159,6 +159,7 @@ namespace Deoxys.Rovers
             {
                 _isDropped = true;
                 _droppedPlanet = planet;
+                _movementController.SetPlanet(planet);
                 return;
             }
 
@@ -179,6 +180,7 @@ namespace Deoxys.Rovers
             {
                 this.Move(movement);
             }
+            _droppedPlanet.Rovers.Add(this);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace Deoxys.Rovers
     public class DefaultRoverMovementConttroller
         : IMovementController
     {
+        private IPlanet _planet;
 
         /// <summary>
         /// ileri yürüme
@@ -22,17 +23,42 @@ namespace Deoxys.Rovers
             switch (currentDirection)
             {
                 case DirectionType.East:
+                    if (_planet.Size.Width < location.X + 1)
+                    {
+                        return location;
+                    }
                     newLocation = new Point(location.X + 1, location.Y);
                     break;
                 case DirectionType.North:
+                    if (_planet.Size.Height < location.Y + 1)
+                    {
+                        return location;
+                    }
                     newLocation = new Point(location.X, location.Y + 1);
                     break;
                 case DirectionType.South:
+                    if (location.Y - 1 < 0)
+                    {
+                        return location;
+                    }
                     newLocation = new Point(location.X, location.Y - 1);
                     break;
                 case DirectionType.West:
+                    if (location.X - 1 < 0)
+                    {
+                        return location;
+                    }
                     newLocation = new Point(location.X - 1, location.Y);
                     break;
+            }
+
+            foreach (var rover in _planet.Rovers)
+            {
+                if (rover.Location.X == newLocation.X && rover.Location.Y == newLocation.Y)
+                {
+                    newLocation = location;
+                    break;
+                }
             }
 
             return newLocation;
@@ -69,6 +95,11 @@ namespace Deoxys.Rovers
             return currentDirection;
 
             // return currentDirection + 90;
+        }
+
+        public void SetPlanet(IPlanet planet)
+        {
+            _planet = planet;
         }
     }
 }

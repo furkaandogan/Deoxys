@@ -1,3 +1,5 @@
+using Deoxys.Planets;
+
 namespace Deoxys
 {
     /// <summary>
@@ -5,6 +7,9 @@ namespace Deoxys
     /// </summary>
     public interface IMovementController
     {
+
+        void SetPlanet(IPlanet planet);
+        
         /// <summary>
         /// sola dönüş
         /// </summary>

@@ -92,9 +92,9 @@ namespace Deoxys.Console.UI
 
             commands.AppendLine("5 5");
             commands.AppendLine("1 2 N");
-            commands.AppendLine("LMLMLMLMM");
-            commands.AppendLine("3 3 E");
-            commands.Append("MMRMMRMRRM");
+            commands.AppendLine("LMMMRM");
+            commands.AppendLine("0 1 N");
+            commands.Append("MMMRMLMMMM");
 
             return commands;
         }
